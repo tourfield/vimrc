@@ -14,6 +14,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'vim-ruby/vim-ruby'
 Plugin 'tomasr/molokai'
 Plugin 'vim-scripts/phd'
 Plugin 'octol/vim-cpp-enhanced-highlight'
@@ -23,13 +24,13 @@ Plugin 'kshenoy/vim-signature'
 Plugin 'vim-scripts/BOOKMARKS--Mark-and-Highlight-Full-Lines'
 Plugin 'majutsushi/tagbar'
 Plugin 'vim-scripts/indexer.tar.gz'
-Plugin 'ianva/vim-youdao-translater'
+"Plugin 'ianva/vim-youdao-translater'
 Plugin 'vim-scripts/DfrankUtil'
 Plugin 'vim-scripts/vimprj'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'vim-scripts/DrawIt'
 Plugin 'SirVer/ultisnips'
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 Plugin 'derekwyatt/vim-protodef'
 Plugin 'scrooloose/nerdtree'
 Plugin 'fholgado/minibufexpl.vim'
@@ -38,7 +39,7 @@ Plugin 'sjl/gundo.vim'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'suan/vim-instant-markdown'
 "Plugin 'lilydjwg/fcitx.vim'
-"Plugin 'quark-zju/vim-cpp-auto-include'
+Plugin 'quark-zju/vim-cpp-auto-include'
 Plugin 'comments.vim' "快速注释
 Plugin 'winmanager' "窗口管理
 Plugin 'Lokaltog/vim-powerline' "漂亮的状态栏
@@ -179,7 +180,7 @@ set tabstop=4
 set shiftwidth=4
 " 让 vim 把连续数量的空格视为一个制表符
 set softtabstop=4
-
+" set paste
 " =================================Typeset End ==================================
 
 " =================================NERD tree Start==================================
@@ -187,9 +188,10 @@ set softtabstop=4
 let NERDChristmasTree=0
 let NERDTreeWinSize=35
 let NERDTreeChDirMode=2
-let NERDTreeIgnore=['\~$', '\.pyc$', '\.swp$', '\.gitignore$','\.git$','\.repo$']
+let NERDTreeIgnore=['\~$', '\.pyc$', '\.swp$', '\.gitignore$','\.git$','\.repo$','\.o$','\.d$','\.a$','\.so$','^tags$','\.orig$']
 let NERDTreeShowBookmarks=1
 let NERDTreeWinPos="left"
+let g:snipMate = { 'snippet_version' : 1 }
 " Automatically open a NERDTree if no files where specified
 autocmd vimenter * if !argc() | NERDTree | endif
 " Close vim if the only window left open is a NERDTree
@@ -281,79 +283,88 @@ let g:OmniSharp_typeLookupInPreview = 1
 
 " =================================YouCompleteMe Start==================================
 " let g:EclimCompletionMethod = 'omnifunc'
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+" let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 " =================================YouCompleteMe End ==================================
 
 " =================================FormartSrc Start==================================
-map <F12> :call FormartSrc()<CR> 
-"定义FormartSrc() 
-func FormartSrc() 
-exec "w" 
-if &filetype == 'c' 
-exec "!astyle % –style=ansi –suffix=none %" 
-exec "e! %" 
-elseif &filetype == 'cpp' 
-"exec "!astyle % –style=ansi –suffix=none %" 
-"exec "e! %" 
-elseif &filetype == 'perl' 
-exec "!astyle –style=gnu –suffix=none %" 
-exec "e! %" 
-elseif &filetype == 'py' 
-exec "!astyle –style=gnu –suffix=none %" 
-exec "e! %" 
-elseif &filetype == 'java' 
-exec "!astyle –style=java –suffix=none %" 
-exec "e! %" 
-elseif &filetype == 'jsp' 
-exec "!astyle –style=gnu –suffix=none %" 
-exec "e! %" 
-elseif &filetype == 'xml' 
-exec "!astyle –style=gnu –suffix=none %" 
-exec "e! %" 
-elseif &filetype == 'html' 
-exec "!astyle –style=gnu –suffix=none %" 
-exec "e! %" 
-elseif &filetype == 'htm' 
-exec "!astyle –style=gnu –suffix=none %" 
-exec "e! %" 
-elseif &filetype == 'php' 
-exec "!astyle –style=gnu –suffix=none %" 
-exec "e! %" 
-elseif &filetype == 'js' 
-exec "!astyle –style=gnu –suffix=none %" 
-exec "e! %" 
-endif 
-endfunc 
+map <F12> :call FormartSrc()<CR>
+"定义FormartSrc()
+func FormartSrc()
+exec "w"
+if &filetype == 'c'
+exec "!astyle % --style=ansi --suffix=none %"
+exec "e! %"
+elseif &filetype == 'cpp'
+exec "!astyle % --style=ansi --suffix=none %"
+exec "e! %"
+elseif &filetype == 'cc'
+exec "!astyle % --style=ansi --suffix=none %"
+exec "e! %"
+elseif &filetype == 'cxx'
+exec "!astyle % --style=ansi --suffix=none %"
+exec "e! %"
+elseif &filetype == 'cu'
+exec "!astyle % --style=ansi --suffix=none %"
+exec "e! %"
+elseif &filetype == 'perl'
+exec "!astyle --style=gnu --suffix=none %"
+exec "e! %"
+elseif &filetype == 'py'
+exec "!astyle --style=gnu --suffix=none %"
+exec "e! %"
+elseif &filetype == 'java'
+exec "!astyle --style=java --suffix=none %"
+exec "e! %"
+elseif &filetype == 'jsp'
+exec "!astyle --style=gnu --suffix=none %"
+exec "e! %"
+elseif &filetype == 'xml'
+exec "!astyle --style=gnu --suffix=none %"
+exec "e! %"
+elseif &filetype == 'html'
+exec "!astyle --style=gnu --suffix=none %"
+exec "e! %"
+elseif &filetype == 'htm'
+exec "!astyle --style=gnu --suffix=none %"
+exec "e! %"
+elseif &filetype == 'php'
+exec "!astyle --style=gnu --suffix=none %"
+exec "e! %"
+elseif &filetype == 'js'
+exec "!astyle --style=gnu --suffix=none %"
+exec "e! %"
+endif
+endfunc
 "结束定义FormartSrc
 "脚本添加执行权限
-function ModeChange() 
-  if getline(1) =~ "^#!" 
-    if getline(1) =~ "/bin/" 
-        silent !chmod a+x <afile> 
-    endif 
-  endif 
-endfunction 
+function ModeChange()
+  if getline(1) =~ "^#!"
+    if getline(1) =~ "/bin/"
+        silent !chmod a+x <afile>
+    endif
+  endif
+endfunction
 au BufWritePost * call ModeChange()
 "打开上次编辑的位置
-autocmd BufReadPost * 
+autocmd BufReadPost *
   \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-  \   exe "normal g'\"" | 
+  \   exe "normal g'\"" |
   \ endif
 "自动添加括号
-:inoremap ( ()<ESC>i 
-:inoremap ) <c-r>=ClosePair(')')<CR> 
-:inoremap { {}<ESC>i 
-:inoremap } <c-r>=ClosePair('}')<CR> 
-:inoremap [ []<ESC>i 
-:inoremap ] <c-r>=ClosePair(']')<CR> 
-:inoremap < <><ESC>i 
-:inoremap > <c-r>=ClosePair('>')<CR> 
-function ClosePair(char) 
+:inoremap ( ()<ESC>i
+:inoremap ) <c-r>=ClosePair(')')<CR>
+:inoremap { {}<ESC>i
+:inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<ESC>i
+:inoremap ] <c-r>=ClosePair(']')<CR>
+:inoremap < <><ESC>i
+:inoremap > <c-r>=ClosePair('>')<CR>
+function ClosePair(char)
     if getline('.')[col('.') - 1] == a:char
-        return "\<Right>" 
-    else 
-        return a:char 
-    endif 
+        return "\<Right>"
+    else
+        return a:char
+    endif
 endf
 " =================================FormartSrc End ==================================
 
@@ -418,14 +429,14 @@ let g:SignatureMap = {
         \ 'ListLocalMarkers'   :  "m?"
         \ }
 
-" tagbar 子窗口中不显示冗余帮助信息 
+" tagbar 子窗口中不显示冗余帮助信息
 let g:tagbar_compact=1
 " 设置 ctags 对哪些代码标识符生成标签
 let g:tagbar_type_cpp = {
     \ 'kinds' : [
          \ 'c:classes:0:1',
          \ 'd:macros:0:1',
-         \ 'e:enumerators:0:0', 
+         \ 'e:enumerators:0:0',
          \ 'f:functions:0:1',
          \ 'g:enumeration:0:1',
          \ 'l:local:0:1',
@@ -458,7 +469,7 @@ let g:tagbar_type_cpp = {
 " 设置插件 indexer 调用 ctags 的参数
 " 默认 --c++-kinds=+p+l，重新设置为 --c++-kinds=+p+l+x+c+d+e+f+g+m+n+s+t+u+v
 " 默认 --fields=+iaS 不满足 YCM 要求，需改为 --fields=+iaSl
-" let g:indexer_ctagsCommandLineOptions="--c++-kinds=+p+l+x+c+d+e+f+g+m+n+s+t+u+v --fields=+iaSl --extra=+q"
+let g:indexer_ctagsCommandLineOptions="--c++-kinds=+p+l+x+c+d+e+f+g+m+n+s+t+u+v --fields=+iaSl --extra=+q"
 
 " 正向遍历同名标签
 nmap <Leader>tn :tnext<CR>
@@ -477,8 +488,8 @@ let g:multi_cursor_next_key='<S-n>'
 let g:multi_cursor_skip_key='<S-k>'
 "<====================================================================>
 "<====================================================================>
-vnoremap <silent> <C-T> <Esc>:Ydv<CR> 
-nnoremap <silent> <C-T> <Esc>:Ydc<CR> 
+vnoremap <silent> <C-T> <Esc>:Ydv<CR>
+nnoremap <silent> <C-T> <Esc>:Ydc<CR>
 noremap <leader>yd :Yde<CR>
 
 "<====================================================================>
@@ -534,7 +545,8 @@ let g:ycm_confirm_extra_conf=0
 " 开启 YCM 标签补全引擎
 let g:ycm_collect_identifiers_from_tags_files=1
 " 引入 C++ 标准库tags
-"set tags+=/data/misc/software/misc./vim/stdcpp.tags
+"set tags+=/home/geary/.vim/tags/opencv
+"set tags+=/home/geary/.vim/tags/cpp_std
 " YCM 集成 OmniCppComplete 补全引擎，设置其快捷键
 inoremap <leader>; <C-x><C-o>
 " 补全内容不以分割子窗口形式出现，只显示补全列表
@@ -543,9 +555,12 @@ set completeopt-=preview
 let g:ycm_min_num_of_chars_for_completion=1
 " 禁止缓存匹配项，每次都重新生成匹配项
 let g:ycm_cache_omnifunc=0
-" 语法关键字补全         
+" 语法关键字补全
 let g:ycm_seed_identifiers_with_syntax=1
-
+set completeopt=longest,menu
+let g:ycm_error_symbol='>>'
+let g:ycm_warning_symbol='>*'
+let g:ycm_use_ultisnips_completer=1
 "由接口快速生成实现框架快捷键 <leader>PP，自动生成了函数框架。
 " 设置 pullproto.pl 脚本路径
 let g:protodefprotogetter='~/.vim/bundle/protodef/pullproto.pl'
@@ -556,6 +571,20 @@ let g:disable_protodef_sorting=1
 source $VIMRUNTIME/ftplugin/man.vim
 " 定义:Man命令查看各类man信息的快捷键
 nmap <Leader>man :Man 3 <cword><CR>
+
+" Python, JavaScript, Go
+"let g:kite_supported_languages = ['python', 'javascript', 'go']
+" All the languages Kite supports
+let g:kite_supported_languages = ['*']
+" Turn off Kite
+" let g:kite_supported_languages = []
+set completeopt+=menuone
+set completeopt+=noselect
+set completeopt+=noinsert
+set completeopt+=preview
+"let g:kite_previous_placeholder = '<C-H>'
+"let g:kite_next_placeholder = '<C-L>`
+autocmd CompleteDone * if !pumvisible() | pclose | endif
 
 
 "<====================================================================>
@@ -578,3 +607,100 @@ let NERDTreeMinimalUI=1
 let NERDTreeAutoDeleteBuffer=1
 "<====================================================================>
 "<====================================================================>
+
+" 当新建 .h .c .hpp .cpp .mk .sh等文件时自动调用SetTitle 函数
+autocmd BufNewFile *.[ch],*.hpp,*.cpp,Makefile,*.mk,*.sh exec ":call SetTitle()"
+autocmd bufnewfile *.py call SetComment_py()
+" 加入注释
+func SetComment()
+	call setline(1,"/*================================================================")
+	call append(line("."),   "*   Copyright (C) ".strftime("%Y")." All rights reserved.")
+	call append(line(".")+1, "*")
+	call append(line(".")+2, "*   filename    : ".expand("%:t"))
+	call append(line(".")+3, "*   Author      : wjyang")
+	call append(line(".")+4, "*   Date        : ".strftime("%Y-%m-%d"))
+	call append(line(".")+5, "*   Description :")
+	call append(line(".")+6, "*")
+	call append(line(".")+7, "================================================================*/")
+	call append(line(".")+8, "")
+endfunc
+" 加入shell,Makefile注释
+func SetComment_sh()
+	call setline(3, "#   Copyright (C) ".strftime("%Y")." All rights reserved.")
+	call setline(4, "#")
+	call setline(5, "#   filename    : ".expand("%:t"))
+	call setline(6, "#   Author      : wjyang")
+	call setline(7, "#   Date        : ".strftime("%Y-%m-%d"))
+	call setline(8, "#   Description :")
+	call setline(9, "#")
+	call setline(10, "#================================================================")
+endfunc
+func SetComment_py()
+	call setline(1, "# -*- coding: utf-8 -*-")
+	call setline(2, "#   Copyright (C) ".strftime("%Y")." All rights reserved.")
+	call setline(3, "#")
+	call setline(4, "#   filename    : ".expand("%:t"))
+	call setline(5, "#   Author      : wjyang")
+	call setline(6, "#   Date        : ".strftime("%Y-%m-%d"))
+	call setline(7, "#   Description :")
+	call setline(8, "#")
+	call setline(9, "#================================================================")
+	call setline(10, "\"\"\" \"\"\"")
+
+	normal G
+	normal o
+	normal o
+endfunc
+
+" 定义函数SetTitle，自动插入文件头
+func SetTitle()
+	if &filetype == 'make'
+		call setline(1, "#================================================================")
+		call setline(2, "#")
+		call SetComment_sh()
+		normal G
+		normal o
+		normal o
+	elseif &filetype == 'sh'
+		call setline(1,"#!/bin/bash")
+		call setline(2, "#================================================================")
+		call SetComment_sh()
+		normal G
+		normal o
+		normal o
+	else
+		call SetComment()
+		if expand("%:e") == 'hpp'
+			call append(line(".")+9, "#ifndef _".toupper(expand("%:t:r"))."_H")
+			call append(line(".")+10, "#define _".toupper(expand("%:t:r"))."_H")
+			call append(line(".")+11, "#ifdef __cplusplus")
+			call append(line(".")+12, "extern \"C\"")
+			call append(line(".")+13, "{")
+			call append(line(".")+14, "#endif")
+			call append(line(".")+15, "")
+			call append(line(".")+16, "#ifdef __cplusplus")
+			call append(line(".")+17, "}")
+			call append(line(".")+18, "#endif")
+			call append(line(".")+19, "#endif //".toupper(expand("%:t:r"))."_H")
+			normal 16G
+			normal o
+			normal o
+		elseif expand("%:e") == 'h'
+			call append(line(".")+9, "#pragma once")
+			normal G
+			normal o
+			normal o
+		elseif &filetype == 'c'
+			call append(line(".")+9,"#include \"".expand("%:t:r").".h\"")
+			normal G
+			normal o
+			normal o
+		elseif &filetype == 'cpp'
+			call append(line(".")+9, "#include \"".expand("%:t:r").".hpp\"")
+			normal G
+			normal o
+			normal o
+		endif
+	endif
+endfunc
+
